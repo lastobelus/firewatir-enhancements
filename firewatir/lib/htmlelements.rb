@@ -445,6 +445,16 @@ class TableBody < Element
     end  
     body_rows
   end
+
+  def each
+    0.upto(rows.length - 1) { |i| yield rows[i] }
+  end
+  
+  # returns the number of rows in this table body.
+  def length
+    return rows.length
+  end
+  
 end
 
 #
