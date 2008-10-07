@@ -1,3 +1,5 @@
+require 'activesupport'
+
 =begin
   license
   ---------------------------------------------------------------------------
@@ -1741,27 +1743,38 @@
     #   Class for iterating over elements of common type like links, images, divs etc.
     #
     class ElementCollections
+        def self.inherited subclass
+          class_name = subclass.to_s.demodulize
+          method_name = class_name.underscore
+          element_class_name = class_name.singularize
+
+          FireWatir::Container.module_eval "def #{method_name}
+          locate if defined?(locate)
+          return #{class_name}.new(self); end"
+
+          subclass.class_eval "def element_class; #{element_class_name}; end"
+        end
+        
         include FireWatir::Container # XXX not sure if this is right
         @@current_level = 0
-        #
-        # Description:
-        #   Initializes new instance of this class.
-        #
-        # Input:
-        #   tag - tag name of the element for which you want the iterator.
-        #   types - element type. used in case where same element tag has different types like input has type image, button etc.
-        #
-        #def initialize(container, tag , types=nil)
-        #    @@current_level += 1
-        #    @@current_element_object = Element.get_current_element
-        #    #puts " the current object #{@@current_element_object}"
-        #    @length = 0
-        #    @arr_name = ""
-        #    @container = container
-        #    @elements = locate_tagged_elements(tag , types)
-        #end
+        
+        def initialize(container)
+          @container = container
+          elements = locate_elements
+          length = elements.length
+          #puts "length is : #{length}"
+          @element_objects = Array.new(length)
+          for i in 0..length - 1 do
+            @element_objects[i] = element_class.new(container, :jssh_name, elements[i])
+          end
+        end
 
-        #
+        # default implementation. overridden by some subclasses.
+        def locate_elements
+          locate_tagged_elements(element_class::TAG)
+        end
+      
+      
         # Description:
         #   Locate all the elements of give tag and type.
         #
@@ -1865,7 +1878,6 @@
         #   Count of elements found on the page.
         #
         def length
-            #puts @element_objects.length
             return @element_objects.length
         end
 

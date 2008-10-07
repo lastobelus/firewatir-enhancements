@@ -2,13 +2,14 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..') unless $SETUP_LOADED
 require 'unittests/setup'
 
 class TC_JavaScript_Test < Test::Unit::TestCase
-    include FireWatir
+    
 #    include FireWatir::Dialog
     
     def setup
         goto_page 'JavascriptClick.html'
     end
     
+    tag_method :test_alert, :fails_on_ie
     def test_alert
         #browser.button(:id, "btnAlert").click_no_wait()
 
@@ -26,6 +27,7 @@ class TC_JavaScript_Test < Test::Unit::TestCase
         assert_equal("Press OK", browser.get_popup_text)
     end
     
+    tag_method :test_confirm_ok, :fails_on_ie
     def test_confirm_ok
         #browser.button(:id, "btnConfirm").click_no_wait()
         
@@ -43,6 +45,7 @@ class TC_JavaScript_Test < Test::Unit::TestCase
         assert_equal("Press a button", browser.get_popup_text)
     end
     
+    tag_method :test_confirm_cancel, :fails_on_ie
     def test_confirm_cancel
         #browser.button(:id, "btnConfirm").click_no_wait()
         
@@ -60,6 +63,7 @@ class TC_JavaScript_Test < Test::Unit::TestCase
         assert_equal("Press a button", browser.get_popup_text)
     end
 
+    tag_method :test_ok_selectbox, :fails_on_ie
     def test_ok_selectbox
         goto_page("selectboxes1.html")
         browser.startClicker("ok")

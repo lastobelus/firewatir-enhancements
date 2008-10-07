@@ -5,9 +5,8 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..') unless $SETUP_LOADED
 require 'unittests/setup'
 
 class TC_Button < Test::Unit::TestCase
-  include Watir::Exception
-  
-  @html_dir = File.join File.dirname(__FILE__), 'html'
+  location __FILE__
+
   def setup
     uses_page "buttons1.html"
   end 
@@ -86,11 +85,12 @@ class TC_Button < Test::Unit::TestCase
 end
   
 class TC_Button2 < Test::Unit::TestCase
-  @html_dir = File.join File.dirname(__FILE__), 'html'
-  include Watir::Exception
+  location __FILE__
+  
   def setup
     uses_page "buttons2.html"
   end 
+
   def test_button2
     assert(browser.button(:caption, "Click Me2").exists?, 'Can\'t find Button with caption "Click Me2"')   
     
@@ -118,10 +118,9 @@ class TC_Button2 < Test::Unit::TestCase
     
     browser.button(:caption, "Click Me2").click
     assert(browser.text.include?("PASS"), 'Clicking on "Click Me2" button should\'ve taken to the "PASS" page') 
-    
   end
 
-  tag_method :test_buttons_length, :fails_with_ie
+  tag_method :test_buttons_length, :fails_on_ie
   def test_buttons_length
     arrButtons = browser.buttons
     assert_equal(7, arrButtons.length)
@@ -142,7 +141,7 @@ class TC_Button2 < Test::Unit::TestCase
   def test_class_buttons
     arr_buttons = browser.buttons
     arr_buttons.each do |b|
-      assert_match(/Button/, b.class.to_s, "element class should be Button; got #{b.class}")
+      assert_class b, 'Button' 
     end
     # test properties
     assert_equal("b2", arr_buttons[1].id)
@@ -170,18 +169,18 @@ class TC_Button2 < Test::Unit::TestCase
 end
 
 class TC_Button_Frame < Test::Unit::TestCase
-  include Watir::Exception  
-  
-  def test_in_frame
+  location __FILE__ 
+
+  def setup
     goto_page "frame_buttons.html"
+  end
+
+  def test_in_frame
     assert(browser.frame("buttonFrame").button(:caption, "Click Me").enabled?)
   end
   
   def test_error_in_frame
-    goto_page "frame_buttons.html"
-    # frame must be specified
     assert_raises(UnknownObjectException) { browser.button(:caption, "Disabled Button").enabled?}  
   end
-  
 end
 

@@ -5,7 +5,7 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..') unless $SETUP_LOADED
 require 'unittests/setup'
 
 class TC_Fields < Test::Unit::TestCase
-    include FireWatir
+    
     
     def setup
         goto_page("textfields1.html")
@@ -63,6 +63,7 @@ class TC_Fields < Test::Unit::TestCase
         assert_equal("Hello World", browser.text_field(:name, "text1").value)  
     end
     
+    tag_method :test_text_field_to_s, :fails_on_ie
     def test_text_field_to_s
         expected = [
             "name:         text1",
@@ -145,6 +146,7 @@ class TC_Fields < Test::Unit::TestCase
         assert_equal(index - 1, browser.text_fields.length)         
     end
     
+    tag_method :test_JS_Events, :fails_on_ie
     def test_JS_Events
         browser.text_field(:name, 'events_tester').set('p')
         
@@ -204,9 +206,10 @@ class TC_Fields < Test::Unit::TestCase
 end
 
 class TC_Labels_Display < Test::Unit::TestCase
-  include FireWatir
+  
   include MockStdoutTestCase
 
+  tag_method :test_showLabels, :fails_on_ie
   def test_showLabels
     goto_page("textfields1.html")
     $stdout = @mockout

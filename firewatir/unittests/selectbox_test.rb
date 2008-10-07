@@ -5,7 +5,7 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..') unless $SETUP_LOADED
 require 'unittests/setup'
 
 class TC_SelectList < Test::Unit::TestCase
-    include FireWatir
+    
     
     def setup()
         goto_page("selectboxes1.html")
@@ -40,6 +40,7 @@ class TC_SelectList < Test::Unit::TestCase
     end    
 
 
+    tag_method :test_option_class_name, :fails_on_ie
     def test_option_class_name
 
         # the option object doesnt inherit from element, so this doesnt work
@@ -124,8 +125,8 @@ class TC_SelectList < Test::Unit::TestCase
 end
 
 class TC_Select_Options < Test::Unit::TestCase
-    include FireWatir
-   
+    tags :fails_on_ie
+       
     def setup()
         goto_page("select_tealeaf.html")
     end

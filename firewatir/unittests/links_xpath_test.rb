@@ -5,8 +5,7 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..') unless $SETUP_LOADED
 require 'unittests/setup'
 
 class TC_Links_XPath < Test::Unit::TestCase
-    include FireWatir
-
+    
     def setup()
         goto_page("links1.html")
     end
@@ -18,6 +17,7 @@ class TC_Links_XPath < Test::Unit::TestCase
         assert_false(exists?{browser.link(:xpath, "//a[contains(., /miss/)]")})   
     end
         
+    tag_method :test_element_by_xpath_class, :fails_on_ie
     def test_element_by_xpath_class
         # TODO: If element is not present this should return null
         #element = browser.element_by_xpath("//a[contains(., /miss/)]")
@@ -25,9 +25,9 @@ class TC_Links_XPath < Test::Unit::TestCase
         #element = browser.element_by_xpath("//a[contains(.,'missing')]")
         #assert(element.instance_of?(Link),"element class should be #{Link}; got #{element.class}")
         element = browser.element_by_xpath("//a[contains(., /TEST/i)]")
-        assert(element.instance_of?(Link),"element class should be #{Link}; got #{element.class}")
+        assert_class(element, 'Link')
         element = browser.element_by_xpath("//a[contains(.,'test1')]")
-        assert(element.instance_of?(Link),"element class should be #{Link}; got #{element.class}")
+        assert_class(element, 'Link')
     end
 
     def test_element_by_xpath_behavior

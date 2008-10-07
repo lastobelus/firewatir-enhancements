@@ -7,7 +7,7 @@ require 'ftools'
 require 'webrick'
 
 class TC_Images < Test::Unit::TestCase
-    include FireWatir
+    
     
     def setup
         goto_page("images1.html")
@@ -165,9 +165,10 @@ class TC_Images < Test::Unit::TestCase
 end
 
 class TC_Images_Display < Test::Unit::TestCase
-  include FireWatir
+  
   include MockStdoutTestCase
 
+  tag_method :test_showImages, :fails_on_ie
   def test_showImages
     goto_page("images1.html")
     $stdout = @mockout

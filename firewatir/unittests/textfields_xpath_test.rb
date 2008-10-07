@@ -5,7 +5,7 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..') unless $SETUP_LOADED
 require 'unittests/setup'
 
 class TC_Fields_XPath < Test::Unit::TestCase
-    include FireWatir
+    
 
     def setup()
         goto_page("textfields1.html")
@@ -89,6 +89,7 @@ class TC_Fields_XPath < Test::Unit::TestCase
          assert_equal(  "FireWatir Firefox Controller" , browser.text_field(:xpath , "//input[@name='text1']").value )  
     end
 
+    tag_method :test_JS_Events, :fails_on_ie
     def test_JS_Events
         browser.text_field(:xpath , "//input[@name='events_tester']").set('p')
 

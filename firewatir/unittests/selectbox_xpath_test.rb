@@ -5,7 +5,7 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..') unless $SETUP_LOADED
 require 'unittests/setup'
 
 class TC_Selectbox_XPath < Test::Unit::TestCase
-    include FireWatir
+    
 
     def setup()
         goto_page("selectboxes1.html")
@@ -17,9 +17,10 @@ class TC_Selectbox_XPath < Test::Unit::TestCase
        assert_false(browser.select_list(:xpath, "//select[@id='missing']").exists?)   
     end
 
+    tag_method :test_element_by_xpath_class, :fails_on_ie
     def test_element_by_xpath_class
       element = browser.element_by_xpath("//select[@name='sel1']")
-      assert(element.instance_of?(SelectList),"element class should be #{SelectList}; got #{element.class}")
+      assert_class(element, 'SelectList')
       # FIXME got HTMLAnchorElement, should've gotten HTMLSelectElement
       # TODO: If element is not present, this should return null
       #element = browser.element_by_xpath("//select[@name='missing']")
@@ -49,6 +50,7 @@ class TC_Selectbox_XPath < Test::Unit::TestCase
            browser.select_list(:xpath, "//select[@name='sel2']").getSelectedItems)   
     end
 
+    tag_method :test_clearSelection, :fails_on_ie
     def test_clearSelection
        assert_raises(UnknownObjectException) { browser.select_list(:xpath, "//select[@name='NoName']").clearSelection }  
        browser.select_list(:xpath, "//select[@name='sel1']").clearSelection

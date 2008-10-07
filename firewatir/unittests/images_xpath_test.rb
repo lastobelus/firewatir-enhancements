@@ -7,7 +7,7 @@ require 'ftools'
 require 'webrick'
 
 class TC_Images_XPath < Test::Unit::TestCase
-    include FireWatir
+    
     
     def setup
         gotoImagePage
@@ -39,26 +39,27 @@ class TC_Images_XPath < Test::Unit::TestCase
         assert_false(  browser.image(:xpath , "//img[contains(@alt , 'tri')]" ).exists?  )
     end
 
+    tag_method :test_element_by_xpath_class, :fails_on_ie
     def test_element_by_xpath_class
       # FIXME getting HTMLAnchorElement instead of HTMLImageElement
       # TODO: This should return null if object is not there.
       #element = browser.element_by_xpath("//img[@name='missing_name']")
       #assert(element.instance_of?(Image),"element class should be #{Image}; got #{element.class}")
       element = browser.element_by_xpath("//img[@name='circle']")
-      assert(element.instance_of?(Image),"element class should be #{Image}; got #{element.class}")
+      assert_class(element, 'Image')
       element = browser.element_by_xpath("//img[contains(@name , 'circ')]")
-      assert(element.instance_of?(Image),"element class should be #{Image}; got #{element.class}")
+      assert_class(element, 'Image')
       # TODO: This should return null if object is not there.
       #element = browser.element_by_xpath("//img[@id='missing_id']")
       #assert(element.instance_of?(Image),"element class should be #{Image}; got #{element.class}")
       element = browser.element_by_xpath("//img[@id='square']")
-      assert(element.instance_of?(Image),"element class should be #{Image}; got #{element.class}")
+      assert_class(element, 'Image')
       element = browser.element_by_xpath("//img[contains(@id, 'squ')]")
-      assert(element.instance_of?(Image),"element class should be #{Image}; got #{element.class}")
+      assert_class(element, 'Image')
       element = browser.element_by_xpath("//img[contains(@src , 'triangle')]")
-      assert(element.instance_of?(Image),"element class should be #{Image}; got #{element.class}")
+      assert_class(element, 'Image')
       element = browser.element_by_xpath("//img[contains(@alt , 'cir')]")
-      assert(element.instance_of?(Image),"element class should be #{Image}; got #{element.class}")
+      assert_class(element, 'Image')
       # TODO: This should return null if object is not there.
       #element = browser.element_by_xpath("//img[contains(@alt , 'tri')]")
       #assert(element.instance_of?(Image),"element class should be #{Image}; got #{element.class}")
