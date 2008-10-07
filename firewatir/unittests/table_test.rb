@@ -275,6 +275,43 @@ class TC_Tables_Buttons < Test::Unit::TestCase
 #  end
 end
 
+class BodiesTest < Test::Unit::TestCase
+  def setup
+    goto_page("table_bodies.html")
+  end
+  
+  def test_finds_single_body
+    table_with_one_body = browser.table(:id, "table_with_one_body")    
+    assert_equal 1, table_with_one_body.bodies.length
+  end
+  
+  def test_finds_two_bodies
+    table_with_two_bodies = browser.table(:id, "table_with_two_bodies")
+    assert_equal 2, table_with_two_bodies.bodies.length
+  end
+  
+  def test_finds_implicit_body
+    table_with_no_explicit_body = browser.table(:id, "table_with_no_explicit_body")
+    assert_equal 1, table_with_no_explicit_body.bodies.length
+  end
+  
+  def test_old_table_body_test
+    goto_page("table1.html")
+            
+    body_test_table = browser.table(:id, 'body_test')
+
+    assert_equal(3, body_test_table.bodies.length)
+    
+    first_body = body_test_table.bodies[0]
+    second_body = body_test_table.bodies[1]
+    third_body = body_test_table.bodies[2]    
+    assert_equal "This text is in the FIRST TBODY", first_body[1][1].to_s
+    assert_equal "This text is in the SECOND TBODY", second_body[1][1].to_s
+    assert_equal "This text is also in the SECOND TBODY", second_body[2][1].to_s
+    assert_equal "This text is in the THIRD TBODY", third_body[1][1].to_s                                
+  end  
+end   
+
 class TC_Table_Columns < Test::Unit::TestCase
   
   def setup

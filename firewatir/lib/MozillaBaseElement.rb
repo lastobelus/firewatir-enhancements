@@ -80,7 +80,23 @@ require 'activesupport'
             #puts "@element_name is #{@element_name}"
             #puts "@element_type is #{@element_type}"
         end
+        
+        def get_collection_length(collection_name)
+          jssh_socket.send("#{element_object}.#{collection_name}.length;\n", 0)
+          read_socket().to_i
+        end
 
+        def get_collection_jssh_names(collection_name)
+          elements_count = get_collection_length(collection_name)
+
+          jssh_names = Array.new(elements_count)
+          for index in 0..elements_count - 1 do
+              jssh_names[index] = "#{element_object}.#{collection_name}[#{index}]"
+          end
+          return jssh_names
+        end
+
+        #TODO: we need to decide how to test all these methods if they are private
         private
         def self.def_wrap(ruby_method_name, ole_method_name = nil)
             ole_method_name = ruby_method_name unless ole_method_name
@@ -256,7 +272,7 @@ require 'activesupport'
                 return nil
             end
         end
-        private :get_rows
+        private :get_rows        
 
         def set_specifier(how, what)    
       		if how.class == Hash and what.nil?
