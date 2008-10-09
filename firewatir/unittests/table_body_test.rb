@@ -42,4 +42,36 @@ class TableBodyTest < Test::Unit::TestCase
     assert_equal "Row #1", body[1][1].to_s
     assert_equal "Row #2", body[2][1].to_s
   end
+  
+  # Mocks would be ideal here
+  def test_length
+    table = browser.table(:id, "table_with_two_bodies")
+    
+    assert_equal table.bodies[0].rows.length, table.bodies[0].length
+    assert_equal table.bodies[1].rows.length, table.bodies[1].length
+  end
+
+  # Again, third proof we need mocks
+  
+  # Dirty mocks implementation
+  FireWatir::TableRow.class_eval do
+    @@counter = 0
+
+    def increment_counter
+      @@counter += 1
+    end
+    
+    def self.counter_value
+      @@counter
+    end
+  end
+  
+  def test_each
+    table = browser.table(:id, "table_with_two_bodies")
+
+    table.bodies[0].each { |row| row.increment_counter }
+    
+    assert_equal table.bodies[0].rows.length, FireWatir::TableRow.counter_value
+  end
+  
 end

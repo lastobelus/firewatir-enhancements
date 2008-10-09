@@ -126,47 +126,7 @@ class TC_Tables < Test::Unit::TestCase
       count += 1
     end
   end 
-  
-  #def test_table_body
-  #  assert_equal( 1, browser.table(:index,1).bodies.length )
-  #  assert_equal( 3, browser.table(:id, 'body_test' ).bodies.length )
-  #  
-  #  count = 1
-  #  browser.table(:id, 'body_test').bodies.each do |n|
-  #    
-  #    # do something better here!
-      # n.flash # this line commented out to speed up the test
-      
-  #    case count 
-  #    when 1 
-  #      compare_text = "This text is in the FRST TBODY."
-  #    when 2 
-  #      compare_text = "This text is in the SECOND TBODY."
-  #    when 3 
-  #      compare_text = "This text is in the THIRD TBODY."
-  #    end
-  #    
-  #    assert_equal(compare_text, n[1][1].to_s.strip )   # this is the 1st cell of the first row of this particular body
-  #    
-  #    count += 1
-  #  end
-  #  assert_equal( count - 1, browser.table(:id, 'body_test').bodies.length )
-  #  
-  #  assert_equal( "This text is in the THIRD TBODY." ,browser.table(:id, 'body_test' ).body(:index,3)[1][1].to_s.strip ) 
-  #  
-  #  # iterate through all the rows in a table body
-  #  count = 1
-  #  browser.table(:id, 'body_test').body(:index, 2).each do | row |
-  #    # row.flash    # this line commented out, to speed up the tests
-  #    if count == 1
-  #      assert_equal('This text is in the SECOND TBODY.', row[1].text.strip )
-  #    elsif count == 1 # BUG: Huh?
-  #      assert_equal('This text is also in the SECOND TBODY.', row[1].text.strip )
-  #    end
-  #    count+=1
-  #  end
-  #end
-  
+    
   def test_table_container
     assert_nothing_raised { browser.table(:id, 't1').html }
   end
@@ -293,9 +253,48 @@ class BodiesTest < Test::Unit::TestCase
   def test_finds_implicit_body
     table_with_no_explicit_body = browser.table(:id, "table_with_no_explicit_body")
     assert_equal 1, table_with_no_explicit_body.bodies.length
-  end
-  
-  def test_old_table_body_test
+  end    
+
+  # Old test. I left it only to proof, that commited code works. Should be deleted, because
+  # there are nice isolated tests
+  def test_table_body_old
+    goto_page("table1.html")
+    
+    assert_equal(1, browser.table(:index, 1).bodies.length)
+    assert_equal(3, browser.table(:id, 'body_test').bodies.length)
+    
+    count = 1
+    browser.table(:id, 'body_test').bodies.each do |n|
+      # do something better here!
+      case count 
+      when 1 
+        compare_text = "This text is in the FIRST TBODY"
+      when 2 
+        compare_text = "This text is in the SECOND TBODY"
+      when 3 
+        compare_text = "This text is in the THIRD TBODY"
+      end
+      assert_equal(compare_text, n[1][1].to_s.strip )   # this is the 1st cell of the first row of this particular body
+      count += 1
+    end
+    assert_equal( count - 1, browser.table(:id, 'body_test').bodies.length )
+    assert_equal( "This text is in the THIRD TBODY" ,browser.table(:id, 'body_test' ).bodies[2][1][1].to_s.strip ) 
+    
+    # iterate through all the rows in a table body
+    count = 1
+    browser.table(:id, 'body_test').bodies[1].each do | row |
+      # row.flash    # this line commented out, to speed up the tests
+      if count == 1
+        assert_equal('This text is in the SECOND TBODY', row[1].to_s.strip )
+      elsif count == 1 # BUG: Huh?
+        assert_equal('This text is also in the SECOND TBODY', row[1].to_s.strip )
+      end
+      count+=1
+    end
+  end 
+
+# It is rewritten test_table_body. I suppose, it should be wiped out too
+  def test_table_body_new
     goto_page("table1.html")
             
     body_test_table = browser.table(:id, 'body_test')
@@ -309,7 +308,7 @@ class BodiesTest < Test::Unit::TestCase
     assert_equal "This text is in the SECOND TBODY", second_body[1][1].to_s
     assert_equal "This text is also in the SECOND TBODY", second_body[2][1].to_s
     assert_equal "This text is in the THIRD TBODY", third_body[1][1].to_s                                
-  end  
+  end   
 end   
 
 class TC_Table_Columns < Test::Unit::TestCase

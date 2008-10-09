@@ -152,8 +152,7 @@ class TC_Tables < Test::Unit::TestCase
     contents = t.cells.collect {|c| c.text}
     assert_equal(["Row 1 Col1","Row 1 Col2","Row 2 Col1","Row 2 Col2"], contents)
   end    
-   
-  tag_method :test_table_body, :fails_on_firefox
+     
   def test_table_body
     assert_equal(1, browser.table(:index, 1).bodies.length)
     assert_equal(3, browser.table(:id, 'body_test').bodies.length)
