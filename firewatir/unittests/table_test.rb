@@ -126,7 +126,6 @@ class TC_Tables < Test::Unit::TestCase
       count += 1
     end
   end 
-    
   def test_table_container
     assert_nothing_raised { browser.table(:id, 't1').html }
   end
